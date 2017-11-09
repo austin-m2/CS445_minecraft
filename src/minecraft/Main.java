@@ -10,8 +10,6 @@
 *
 ****************************************************************/ 
 package minecraft;
-import java.util.*;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;

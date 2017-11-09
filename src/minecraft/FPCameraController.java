@@ -1,6 +1,6 @@
 /***************************************************************
 * file: FPCameraController.java
-* author: Austin Morris, Duy Le
+* author: Austin Morris, Duy Le, TszWai Yan
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project
@@ -152,7 +152,7 @@ public class FPCameraController {
             if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
                 camera.moveUp(movementSpeed);
             }
-            if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                 camera.moveDown(movementSpeed);
             }
             
