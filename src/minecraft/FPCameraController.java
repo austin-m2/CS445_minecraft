@@ -1,8 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/***************************************************************
+* file: FPCameraController.java
+* author: Austin Morris, Duy Le
+* class: CS 445 – Computer Graphics
+*
+* assignment: final project
+* date last modified: 11/8/2017
+*
+* purpose: create a first person camera object for user to control!
+* It also renders a 2x2x2 cube with different color side.
+*
+****************************************************************/ 
 package minecraft;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.input.Keyboard;
@@ -155,6 +162,7 @@ public class FPCameraController {
             camera.lookThrough();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //you would draw your scene here.
+            //new Chunk(0, 0, 0).render();
             render();
             //draw the buffer to the screen
             Display.update();
@@ -164,14 +172,47 @@ public class FPCameraController {
         Display.destroy();
     }
     
+    //Draw a cube
     private void render() {
         try {
             glBegin(GL_QUADS);
-                glColor3f(1.0f,0.0f,1.0f);
-                glVertex3f( 1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f,-1.0f,-1.0f);
-                glVertex3f(-1.0f, 1.0f,-1.0f);
-                glVertex3f( 1.0f, 1.0f,-1.0f); 
+                //Top
+                glColor3f(0.0f, 0.0f, 1.0f);
+                glVertex3f(2.0f, 2.0f, -2.0f);
+                glVertex3f(-2.0f, 2.0f, -2.0f);
+                glVertex3f(-2.0f, 2.0f, 2.0f);
+                glVertex3f(2.0f, 2.0f, 2.0f);
+                //Bottom
+                glColor3f(0.0f, 1.0f, 1.0f);
+                glVertex3f(2.0f, -2.0f, 2.0f);
+                glVertex3f(-2.0f, -2.0f, 2.0f);
+                glVertex3f(-2.0f, -2.0f, -2.0f);
+                glVertex3f(2.0f, -2.0f, -2.0f);
+                //Front
+                glColor3f(1.0f, 0.0f, 1.0f);
+                glVertex3f(2.0f, 2.0f, 2.0f);
+                glVertex3f(-2.0f, 2.0f, 2.0f);
+                glVertex3f(-2.0f, -2.0f, 2.0f);
+                glVertex3f(2.0f, -2.0f, 2.0f);
+                //Back
+                glColor3f(1.0f, 0.0f, 0.0f);
+                glVertex3f(2.0f, -2.0f, -2.0f);
+                glVertex3f(-2.0f, -2.0f, -2.0f);
+                glVertex3f(-2.0f, 2.0f, -2.0f);
+                glVertex3f(2.0f, 2.0f, -2.0f);
+                //Left
+                glColor3f(0.0f, 1.0f, 0.0f);
+                glVertex3f(-2.0f, 2.0f, 2.0f);
+                glVertex3f(-2.0f, 2.0f,-2.0f);
+                glVertex3f(-2.0f,-2.0f,-2.0f);
+                glVertex3f(-2.0f,-2.0f, 2.0f);
+                //Right
+                glColor3f(1.0f, 1.0f, 0.0f);
+                glVertex3f( 2.0f, 2.0f,-2.0f);
+                glVertex3f( 2.0f, 2.0f, 2.0f);
+                glVertex3f( 2.0f,-2.0f, 2.0f);
+                glVertex3f( 2.0f,-2.0f,-2.0f);
+
             glEnd();
         } catch(Exception e) {
         }
