@@ -16,8 +16,8 @@ package minecraft;
  * @author Duy
  */
 public class Block {
-    private boolean IsActive;
-    private BlockType Type;
+    private boolean isActive;
+    private BlockType type;
     private float x, y, z;
 
     public enum BlockType {
@@ -28,23 +28,25 @@ public class Block {
         BlockType_Dirt(3),
         BlockType_Stone(4),
         BlockType_Bedrock(5);
+        
         private int BlockID;
 
         BlockType(int i) {
             BlockID = i;
         }
 
-        public int GetID() {
+        public int getID() {
             return BlockID;
         }
 
-        public void SetID(int i) {
+        public void setID(int i) {
             BlockID = i;
         }
     }
     
     public Block(BlockType type) {
-        Type = type;
+        this.type = type;
+        isActive = true;
     }
 
     public void setCoords(float x, float y, float z) {
@@ -53,16 +55,16 @@ public class Block {
         this.z = z;
     }
 
-    public boolean IsActive() {
-        return IsActive;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void SetActive(boolean active) {
-        IsActive = active;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
-    public int GetID() {
-        return Type.GetID();
+    public int getID() {
+        return type.getID();
     }
 }
 

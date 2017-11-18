@@ -1,6 +1,6 @@
 /***************************************************************
 * file: Main.java
-* author: Austin Morris
+* author: Austin Morris, TszWai Yan
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project
@@ -10,6 +10,7 @@
 *
 ****************************************************************/ 
 package minecraft;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
@@ -68,6 +69,9 @@ public class Main {
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
         glEnable(GL_DEPTH_TEST);
+        
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     } 
 }
 

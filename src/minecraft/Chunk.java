@@ -1,6 +1,6 @@
 /***************************************************************
 * file: Chunk.java
-* author: Duy Le
+* author: Duy Le, TszWai Yan
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project
@@ -16,73 +16,94 @@ import java.util.Random;
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  *
  * @author Duy
  */
 public class Chunk {
+    
+    //print a 2D array of noise value
+    public static final boolean PRINT_NOISE_VALUES = false;
 
-    static final int CHUNK_SIZE = 1;
+    static final int CHUNK_SIZE = 30;
     static final int CUBE_LENGTH = 2;
-    private Block[][][] Blocks;
+
+    private Block[][][] blocks;
     private int VBOVertexHandle;
     private int VBOColorHandle;
+    private int VBOTextureHandle;
+    private Texture texture;
     private int StartX, StartY, StartZ;
     private Random r;
+    private SimplexNoise noise;
 
     public void render() {
         glPushMatrix();
-        glPushMatrix();
+        
         glBindBuffer(GL_ARRAY_BUFFER, VBOVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, VBOColorHandle);
         glColorPointer(3, GL_FLOAT, 0, 0L);
+        glBindBuffer(GL_ARRAY_BUFFER, VBOTextureHandle);
+        glBindTexture(GL_TEXTURE_2D, 1);
+        glTexCoordPointer(2, GL_FLOAT, 0, 0L);
         glDrawArrays(GL_QUADS, 0, CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 24);
+        
         glPopMatrix();
     }
 
     public void rebuildMesh(float startX, float startY, float startZ) {
         VBOColorHandle = glGenBuffers();
         VBOVertexHandle = glGenBuffers();
+        VBOTextureHandle = glGenBuffers();
         FloatBuffer VertexPositionData = BufferUtils.createFloatBuffer(
                 (CHUNK_SIZE * CHUNK_SIZE
                 * CHUNK_SIZE) * 6 * 12);
         FloatBuffer VertexColorData = BufferUtils.createFloatBuffer(
                 (CHUNK_SIZE * CHUNK_SIZE
                 * CHUNK_SIZE) * 6 * 12);
+        FloatBuffer VertexTextureData = BufferUtils.createFloatBuffer((
+                CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE) * 6 * 12);
         for (float x = 0; x < CHUNK_SIZE; x += 1) {
             for (float z = 0; z < CHUNK_SIZE; z += 1) {
                 for (float y = 0; y < CHUNK_SIZE; y++) {
-                    VertexPositionData.put(
-                            createCube((float) (startX + x
-                                    * CUBE_LENGTH),
-                                    (float) (y * CUBE_LENGTH
-                                    + (int) (CHUNK_SIZE * .8)),
-                                    (float) (startZ + z
-                                    * CUBE_LENGTH)));
-                    VertexColorData.put(
-                            createCubeVertexCol(
-                                    getCubeColor(
-                                            Blocks[(int) x][(int) y][(int) z])));
+                    if(blocks[(int)x][(int)y][(int)z].isActive()){
+                        VertexPositionData.put(createCube(
+                                (float) (startX + x * CUBE_LENGTH),
+                                (float) (startY + y * CUBE_LENGTH + 
+                                        (int) (CHUNK_SIZE * .8)),
+                                (float) (startZ + z * CUBE_LENGTH)));
+                        VertexColorData.put(createCubeVertexCol(getCubeColor(
+                                blocks[(int) x][(int) y][(int) z])));
+                        VertexTextureData.put(createTexCube(0f, 0f, 
+                                blocks[(int) x][(int) y][(int) z]));
+                    }
                 }
             }
         }
         VertexColorData.flip();
         VertexPositionData.flip();
+        VertexTextureData.flip();
         glBindBuffer(GL_ARRAY_BUFFER, VBOVertexHandle);
         glBufferData(GL_ARRAY_BUFFER, VertexPositionData, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ARRAY_BUFFER, VBOColorHandle);
         glBufferData(GL_ARRAY_BUFFER, VertexColorData, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, VBOTextureHandle);
+        glBufferData(GL_ARRAY_BUFFER, VertexTextureData, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     private float[] createCubeVertexCol(float[] CubeColorArray) {
         float[] cubeColors = new float[CubeColorArray.length * 4 * 6];
         for (int i = 0; i < cubeColors.length; i++) {
-            cubeColors[i] = CubeColorArray[i
-                    % CubeColorArray.length];
+            cubeColors[i] = CubeColorArray[i % CubeColorArray.length];
         }
         return cubeColors;
     }
@@ -123,42 +144,177 @@ public class Chunk {
     }
 
     private float[] getCubeColor(Block block) {
-        switch (block.GetID()) {
-            case 1:
-                return new float[]{0, 1, 0};
-            case 2:
-                return new float[]{1, 0.5f, 0};
-            case 3:
-                return new float[]{0, 0f, 1f};
-        }
         return new float[]{1, 1, 1};
     }
 
     public Chunk(int startX, int startY, int startZ) {
+        try {
+            texture = TextureLoader.getTexture("PNG", 
+                    ResourceLoader.getResourceAsStream("terrain.png"));
+        } catch (Exception e) {
+            System.out.print("Error: terrain.png not found.");
+        }
+        
         r = new Random();
-        Blocks = new Block[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+        noise = new SimplexNoise(20, .25d, r.nextInt());
+        
+        blocks = new Block[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
         for (int x = 0; x < CHUNK_SIZE; x++) {
-            for (int y = 0; y < CHUNK_SIZE; y++) {
-                for (int z = 0; z < CHUNK_SIZE; z++) {
-                    //Commented out for debugging reasoN. REMEMBER TO UNCOMMENT WHEN DOING CHECKPOINT 2!!!!
+//            for (int y = 0; y < CHUNK_SIZE; y++) {
+//                for (int z = 0; z < CHUNK_SIZE; z++) {
 //                    if (r.nextFloat() > 0.7f) {
-//                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
+//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
 //                    } else if (r.nextFloat() > 0.4f) {
-//                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
+//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
 //                    } else if (r.nextFloat() > 0.2f) {
-//                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
 //                    } else {
-//                        Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Default);
+//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Default);
 //                    }
-                    Blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
+//                    blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
+//                }
+//            }
+            for(int z = 0; z < CHUNK_SIZE; z++) {
+                if(PRINT_NOISE_VALUES) {
+                    System.out.print(noise.getNoise(x, z) * 5 + "\t");
                 }
+                for(int y = 0; y < CHUNK_SIZE; y++) {
+                    if(y == 0) {
+                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Bedrock);
+                    } else if (y >= 24 + noise.getNoise(x, z) * 5) {
+                        int ranNum = r.nextInt(3);
+                        switch (ranNum) {
+                            case 0:
+                                blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
+                                break;
+                            case 1:
+                                blocks[x][y][z] = new Block(Block.BlockType.BlockType_Sand);
+                                break;
+                            case 2:
+                                blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+                                break;
+                            default:
+                                break;
+                        }
+                    } else if(y < 24 + noise.getNoise(x, z) * 5) {
+                        int ranNum = r.nextInt(2);
+                        switch(ranNum){
+                            case 0:
+                                blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
+                                break;
+                            default:
+                               blocks[x][y][z] = new Block(Block.BlockType.BlockType_Stone);
+                               break;
+                        }
+                    } else {
+                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Bedrock);
+                    }
+                    
+                    if(y >= 25 + noise.getNoise(x, z) * 5) {
+                        blocks[x][y][z].setActive(false);
+                    }
+                }
+            }
+            if(PRINT_NOISE_VALUES){
+                System.out.println();
             }
         }
         VBOColorHandle = glGenBuffers();
         VBOVertexHandle = glGenBuffers();
-        StartX = startX;
-        StartY = startY;
-        StartZ = startZ;
+        VBOTextureHandle = glGenBuffers();
+        this.StartX = startX;
+        this.StartY = startY;
+        this.StartZ = startZ;
         rebuildMesh(startX, startY, startZ);
+    }
+    
+    public static float[] createTexCube(float x, float y, Block block) {
+        float offset = (1024f/16)/1024f;
+        
+        switch (block.getID()) {
+            case 0:
+                return new float[] {
+                    //Bottom Quad
+                    x + offset * 3, y + offset * 10, 
+                    x + offset * 2, y + offset * 10, 
+                    x + offset * 2, y + offset * 9, 
+                    x + offset * 3, y + offset * 9, 
+                    //Top Quad
+                    x + offset * 3, y + offset * 1, 
+                    x + offset * 2, y + offset * 1, 
+                    x + offset * 2, y + offset * 0, 
+                    x + offset * 3, y + offset * 0,
+                    //Front Quad
+                    x + offset * 3, y + offset * 0, 
+                    x + offset * 4, y + offset * 0, 
+                    x + offset * 4, y + offset * 1, 
+                    x + offset * 3, y + offset * 1,
+                    //Back Quad
+                    x + offset * 4, y + offset * 1, 
+                    x + offset * 3, y + offset * 1, 
+                    x + offset * 3, y + offset * 0, 
+                    x + offset * 4, y + offset * 0,
+                    //Left Quad
+                    x + offset * 3, y + offset * 0, 
+                    x + offset * 4, y + offset * 0, 
+                    x + offset * 4, y + offset * 1, 
+                    x + offset * 3, y + offset * 1,
+                    //Right Quad
+                    x + offset * 3, y + offset * 0, 
+                    x + offset * 4, y + offset * 0, 
+                    x + offset * 4, y + offset * 1, 
+                    x + offset * 3, y + offset * 1
+                };
+            case 1:
+                return sameTextureAllSides(x, y, offset, 2, 1);
+            case 2:
+                return sameTextureAllSides(x, y, offset, 2, 1);
+            case 3:
+                return sameTextureAllSides(x, y, offset, 2, 1);
+            case 4:
+                return sameTextureAllSides(x, y, offset, 2, 1);
+            case 5:
+                return sameTextureAllSides(x, y, offset, 2, 1);
+        }
+        throw new RuntimeException("No texture mapping for such block ID.");
+    }
+    
+    private static float[] sameTextureAllSides(float x, float y, float offset, 
+            float left, float top) {
+        float right = left + 1;
+        float bottom = top + 1;
+        return new float[] {
+            //Top Quad
+            x + offset * right, y + offset * bottom,
+            x + offset * left, y + offset * bottom,
+            x + offset * left, y + offset * top,
+            x + offset * right, y + offset * top,
+            //Bottom Quad
+            x + offset * right, y + offset * top,
+            x + offset * left, y + offset * top,
+            x + offset * left, y + offset * bottom,
+            x + offset * right, y + offset * bottom,
+            //Front Quad
+            x + offset * left, y + offset * bottom,
+            x + offset * right, y + offset * bottom,
+            x + offset * right, y + offset * top,
+            x + offset * left, y + offset * top,
+            //Back Quad
+            x + offset * right, y + offset * top,
+            x + offset * left, y + offset * top,
+            x + offset * left, y + offset * bottom,
+            x + offset * right, y + offset * bottom,
+            //Left Quad
+            x + offset * left, y + offset * bottom,
+            x + offset * right, y + offset * bottom,
+            x + offset * right, y + offset * top,
+            x + offset * left, y + offset * top,
+            //Right Quad
+            x + offset * left, y + offset * bottom,
+            x + offset * right, y + offset * bottom,
+            x + offset * right, y + offset * top,
+            x + offset * left, y + offset * top
+        };
+        
     }
 }
