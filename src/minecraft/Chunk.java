@@ -268,13 +268,13 @@ public class Chunk {
             case 1:
                 return sameTextureAllSides(x, y, offset, 2, 1);
             case 2:
-                return sameTextureAllSides(x, y, offset, 2, 1);
+                return sameTextureAllSides(x, y, offset, 14, 0);
             case 3:
-                return sameTextureAllSides(x, y, offset, 2, 1);
+                return sameTextureAllSides(x, y, offset, 2, 0);
             case 4:
-                return sameTextureAllSides(x, y, offset, 2, 1);
+                return sameTextureAllSides(x, y, offset, 1, 0);
             case 5:
-                return sameTextureAllSides(x, y, offset, 2, 1);
+                return sameTextureAllSides(x, y, offset, 1, 1);
         }
         throw new RuntimeException("No texture mapping for such block ID.");
     }

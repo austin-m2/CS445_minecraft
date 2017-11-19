@@ -31,10 +31,6 @@ public class SimplexNoise {
 
             frequencys[i] = Math.pow(2,i);
             amplitudes[i] = Math.pow(persistence,octaves.length-i);
-
-
-
-
         }
 
     }

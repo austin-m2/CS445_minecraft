@@ -41,7 +41,7 @@ public class FPCameraController {
 //        lPosition.x = 0f;
 //        lPosition.y = 15f;
 //        lPosition.z = 0f;
-        chunk = new Chunk(9, -100, -50);
+        chunk = new Chunk(-40, -80, -50);
     }
     
     //increment the camera's current yaw rotation
@@ -188,44 +188,45 @@ public class FPCameraController {
     //Draw a cube
     private void render() {
         try {
-            glBegin(GL_QUADS);
-                //Top
-                glColor3f(0.0f, 0.0f, 1.0f);
-                glVertex3f(2.0f, 2.0f, -2.0f);
-                glVertex3f(-2.0f, 2.0f, -2.0f);
-                glVertex3f(-2.0f, 2.0f, 2.0f);
-                glVertex3f(2.0f, 2.0f, 2.0f);
-                //Bottom
-                glColor3f(0.0f, 1.0f, 1.0f);
-                glVertex3f(2.0f, -2.0f, 2.0f);
-                glVertex3f(-2.0f, -2.0f, 2.0f);
-                glVertex3f(-2.0f, -2.0f, -2.0f);
-                glVertex3f(2.0f, -2.0f, -2.0f);
-                //Front
-                glColor3f(1.0f, 0.0f, 1.0f);
-                glVertex3f(2.0f, 2.0f, 2.0f);
-                glVertex3f(-2.0f, 2.0f, 2.0f);
-                glVertex3f(-2.0f, -2.0f, 2.0f);
-                glVertex3f(2.0f, -2.0f, 2.0f);
-                //Back
-                glColor3f(1.0f, 0.0f, 0.0f);
-                glVertex3f(2.0f, -2.0f, -2.0f);
-                glVertex3f(-2.0f, -2.0f, -2.0f);
-                glVertex3f(-2.0f, 2.0f, -2.0f);
-                glVertex3f(2.0f, 2.0f, -2.0f);
-                //Left
-                glColor3f(0.0f, 1.0f, 0.0f);
-                glVertex3f(-2.0f, 2.0f, 2.0f);
-                glVertex3f(-2.0f, 2.0f,-2.0f);
-                glVertex3f(-2.0f,-2.0f,-2.0f);
-                glVertex3f(-2.0f,-2.0f, 2.0f);
-                //Right
-                glColor3f(1.0f, 1.0f, 0.0f);
-                glVertex3f( 2.0f, 2.0f,-2.0f);
-                glVertex3f( 2.0f, 2.0f, 2.0f);
-                glVertex3f( 2.0f,-2.0f, 2.0f);
-                glVertex3f( 2.0f,-2.0f,-2.0f);
-            glEnd();
+            chunk.render();
+//            glBegin(GL_QUADS);
+//                //Top
+//                glColor3f(0.0f, 0.0f, 1.0f);
+//                glVertex3f(2.0f, 2.0f, -2.0f);
+//                glVertex3f(-2.0f, 2.0f, -2.0f);
+//                glVertex3f(-2.0f, 2.0f, 2.0f);
+//                glVertex3f(2.0f, 2.0f, 2.0f);
+//                //Bottom
+//                glColor3f(0.0f, 1.0f, 1.0f);
+//                glVertex3f(2.0f, -2.0f, 2.0f);
+//                glVertex3f(-2.0f, -2.0f, 2.0f);
+//                glVertex3f(-2.0f, -2.0f, -2.0f);
+//                glVertex3f(2.0f, -2.0f, -2.0f);
+//                //Front
+//                glColor3f(1.0f, 0.0f, 1.0f);
+//                glVertex3f(2.0f, 2.0f, 2.0f);
+//                glVertex3f(-2.0f, 2.0f, 2.0f);
+//                glVertex3f(-2.0f, -2.0f, 2.0f);
+//                glVertex3f(2.0f, -2.0f, 2.0f);
+//                //Back
+//                glColor3f(1.0f, 0.0f, 0.0f);
+//                glVertex3f(2.0f, -2.0f, -2.0f);
+//                glVertex3f(-2.0f, -2.0f, -2.0f);
+//                glVertex3f(-2.0f, 2.0f, -2.0f);
+//                glVertex3f(2.0f, 2.0f, -2.0f);
+//                //Left
+//                glColor3f(0.0f, 1.0f, 0.0f);
+//                glVertex3f(-2.0f, 2.0f, 2.0f);
+//                glVertex3f(-2.0f, 2.0f,-2.0f);
+//                glVertex3f(-2.0f,-2.0f,-2.0f);
+//                glVertex3f(-2.0f,-2.0f, 2.0f);
+//                //Right
+//                glColor3f(1.0f, 1.0f, 0.0f);
+//                glVertex3f( 2.0f, 2.0f,-2.0f);
+//                glVertex3f( 2.0f, 2.0f, 2.0f);
+//                glVertex3f( 2.0f,-2.0f, 2.0f);
+//                glVertex3f( 2.0f,-2.0f,-2.0f);
+//            glEnd();
         } catch(Exception e) {
         }
     }
