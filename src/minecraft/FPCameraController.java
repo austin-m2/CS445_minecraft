@@ -53,7 +53,7 @@ public class FPCameraController {
     //increment the camera's current pitch rotation
     public void pitch(float amount) {
         //increment the pitch by the amount param
-        pitch -= amount;
+        pitch += amount;
         if(pitch < -90) {
             pitch = -90;
         }
