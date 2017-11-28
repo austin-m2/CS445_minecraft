@@ -11,6 +11,7 @@
 *
 ****************************************************************/ 
 package minecraft;
+
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
@@ -20,10 +21,6 @@ import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.Sys;
 
-/**
- *
- * @author morri
- */
 public class FPCameraController {
     //3d vector to store the camera's position in
     private Vector3f position   = null;
@@ -32,10 +29,14 @@ public class FPCameraController {
     //the rotation around the Y axis of the camera
     private float yaw   = 0.0f;
     private float pitch = 0.0f;
-//    private Vector3Float me;
     
     private Chunk chunk;
     
+    /*
+    * method: FPCameraController
+    * 
+    * purpose: This constructor defines the position of the camera.
+    */
     public FPCameraController(float x, float y, float z) {
         //instantiate position Vector3f to the x y z params
         position = new Vector3f(x, y, z);
@@ -46,13 +47,21 @@ public class FPCameraController {
         chunk = new Chunk(-40, -80, -50);
     }
     
-    //increment the camera's current yaw rotation
+    /*
+    * method: yaw
+    * 
+    * purpose: This method increment the camera's current yaw rotation.
+    */
     public void yaw(float amount) {
         //increment the yaw by the amount param
         yaw += amount;
     }
 
-    //increment the camera's current pitch rotation
+    /*
+    * method: pitch
+    * 
+    * purpose: This method increment the camera's current pitch rotation.
+    */
     public void pitch(float amount) {
         //increment the pitch by the amount param
         pitch += amount;
@@ -64,7 +73,12 @@ public class FPCameraController {
         }
     }
 
-    //moves the camera forward relative to its current rotation (yaw)
+    /*
+    * method: walkForward
+    * 
+    * purpose: This method moves the camera forward relative to its current 
+    *          rotation (yaw).
+    */
     public void walkForward(float distance) {
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
@@ -77,7 +91,12 @@ public class FPCameraController {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
-    //moves the camera backward relative to its current rotation (yaw)
+    /*
+    * method: walkBackwards
+    * 
+    * purpose: This method moves the camera backward relative to its current 
+    *          rotation (yaw).
+    */
     public void walkBackwards(float distance) {
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw));
@@ -90,7 +109,12 @@ public class FPCameraController {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
-    //strafes the camera left relative to its current rotation (yaw)
+    /*
+    * method: strafeLeft
+    * 
+    * purpose: This method strafes the camera left relative to its current 
+    *          rotation (yaw).
+    */
     public void strafeLeft(float distance) {
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw-90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw-90));
@@ -103,7 +127,12 @@ public class FPCameraController {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
-    //strafes the camera right relative to its current rotation (yaw)
+    /*
+    * method: strafeRight
+    * 
+    * purpose: This method strafes the camera right relative to its current 
+    *          rotation (yaw).
+    */
     public void strafeRight(float distance) {
         float xOffset = distance * (float)Math.sin(Math.toRadians(yaw+90));
         float zOffset = distance * (float)Math.cos(Math.toRadians(yaw+90));
@@ -116,18 +145,32 @@ public class FPCameraController {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
-    //moves the camera up relative to its current rotation (yaw)
+    /*
+    * method: moveUp
+    * 
+    * purpose: This method moves the camera up relative to its current 
+    *          rotation (yaw).
+    */
     public void moveUp(float distance) {
         position.y -= distance;
     }
 
-    //moves the camera down
+    /*
+    * method: moveDown
+    * 
+    * purpose: This method moves the camera down relative to its current
+    *          rotation (yaw).
+    */
     public void moveDown(float distance) {
         position.y += distance;
     }
     
-    //translates and rotate the matrix so that it looks through the camera
-    //this does basically what gluLookAt() does
+    /*
+    * method: lookThrough
+    * 
+    * purpose: translates and rotate the matrix so that it looks through the 
+    *          camera this does basically what gluLookAt() does
+    */
     public void lookThrough() {
         //rotate the pitch around the X axis
         glRotatef(pitch, 1.0f, 0.0f, 0.0f);
@@ -142,6 +185,11 @@ public class FPCameraController {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
     
+    /*
+    * method: gameLoop
+    * 
+    * purpose: This method actually render the blocks.
+    */
     public void gameLoop() {
         FPCameraController camera = new FPCameraController(0, 0, 0);
         float dx = 0.0f;
@@ -200,7 +248,7 @@ public class FPCameraController {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 //you would draw your scene here.
                 //new Chunk(0, 0, 0).render();
-                render();
+                chunk.render();
                 //draw the buffer to the screen
                 Display.update();
                 Display.sync(60);
@@ -211,51 +259,4 @@ public class FPCameraController {
         } 
         Display.destroy();
     }
-    
-    //Draw a the world
-    private void render() {
-        try {
-            chunk.render();
-//            glBegin(GL_QUADS);
-//                //Top
-//                glColor3f(0.0f, 0.0f, 1.0f);
-//                glVertex3f(2.0f, 2.0f, -2.0f);
-//                glVertex3f(-2.0f, 2.0f, -2.0f);
-//                glVertex3f(-2.0f, 2.0f, 2.0f);
-//                glVertex3f(2.0f, 2.0f, 2.0f);
-//                //Bottom
-//                glColor3f(0.0f, 1.0f, 1.0f);
-//                glVertex3f(2.0f, -2.0f, 2.0f);
-//                glVertex3f(-2.0f, -2.0f, 2.0f);
-//                glVertex3f(-2.0f, -2.0f, -2.0f);
-//                glVertex3f(2.0f, -2.0f, -2.0f);
-//                //Front
-//                glColor3f(1.0f, 0.0f, 1.0f);
-//                glVertex3f(2.0f, 2.0f, 2.0f);
-//                glVertex3f(-2.0f, 2.0f, 2.0f);
-//                glVertex3f(-2.0f, -2.0f, 2.0f);
-//                glVertex3f(2.0f, -2.0f, 2.0f);
-//                //Back
-//                glColor3f(1.0f, 0.0f, 0.0f);
-//                glVertex3f(2.0f, -2.0f, -2.0f);
-//                glVertex3f(-2.0f, -2.0f, -2.0f);
-//                glVertex3f(-2.0f, 2.0f, -2.0f);
-//                glVertex3f(2.0f, 2.0f, -2.0f);
-//                //Left
-//                glColor3f(0.0f, 1.0f, 0.0f);
-//                glVertex3f(-2.0f, 2.0f, 2.0f);
-//                glVertex3f(-2.0f, 2.0f,-2.0f);
-//                glVertex3f(-2.0f,-2.0f,-2.0f);
-//                glVertex3f(-2.0f,-2.0f, 2.0f);
-//                //Right
-//                glColor3f(1.0f, 1.0f, 0.0f);
-//                glVertex3f( 2.0f, 2.0f,-2.0f);
-//                glVertex3f( 2.0f, 2.0f, 2.0f);
-//                glVertex3f( 2.0f,-2.0f, 2.0f);
-//                glVertex3f( 2.0f,-2.0f,-2.0f);
-//            glEnd();
-        } catch(Exception e) {
-        }
-    }
-
 }

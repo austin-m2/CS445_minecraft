@@ -20,10 +20,6 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
-/**
- *
- * @author Duy
- */
 public class Chunk {
     
     //print a 2D array of noise value
@@ -41,6 +37,11 @@ public class Chunk {
     private Random r;
     private SimplexNoise noise;
 
+    /*
+    * method: render
+    * 
+    * purpose: This method render the blocks with gl methods.
+    */
     public void render() {
         glPushMatrix();
         
@@ -56,6 +57,11 @@ public class Chunk {
         glPopMatrix();
     }
 
+    /*
+    * method: rebuildMesh
+    * 
+    * purpose: This method rebuild the mesh.
+    */
     public void rebuildMesh(float startX, float startY, float startZ) {
         VBOColorHandle = glGenBuffers();
         VBOVertexHandle = glGenBuffers();
@@ -100,6 +106,12 @@ public class Chunk {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    /*
+    * method: createCubeVertexCol
+    * 
+    * purpose: This method return the color from a given color array for the 
+    *          block.
+    */
     private float[] createCubeVertexCol(float[] CubeColorArray) {
         float[] cubeColors = new float[CubeColorArray.length * 4 * 6];
         for (int i = 0; i < cubeColors.length; i++) {
@@ -108,6 +120,11 @@ public class Chunk {
         return cubeColors;
     }
 
+    /*
+    * method: createCube
+    * 
+    * purpose: This method actually create the block.
+    */
     public static float[] createCube(float x, float y, float z) {
         int offset = CUBE_LENGTH / 2;
         return new float[]{
@@ -143,10 +160,20 @@ public class Chunk {
             x + offset, y - offset, z};
     }
 
+    /*
+    * method: getCubeColor
+    * 
+    * purpose: This method return a float color array of 1, 1, 1.
+    */
     private float[] getCubeColor(Block block) {
         return new float[]{1, 1, 1};
     }
 
+    /*
+    * method: Chunk
+    * 
+    * purpose: This constructor set the texture, and positon of random blocks.
+    */
     public Chunk(int startX, int startY, int startZ) {
         try {
             texture = TextureLoader.getTexture("PNG", 
@@ -160,20 +187,6 @@ public class Chunk {
         
         blocks = new Block[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
         for (int x = 0; x < CHUNK_SIZE; x++) {
-//            for (int y = 0; y < CHUNK_SIZE; y++) {
-//                for (int z = 0; z < CHUNK_SIZE; z++) {
-//                    if (r.nextFloat() > 0.7f) {
-//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
-//                    } else if (r.nextFloat() > 0.4f) {
-//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
-//                    } else if (r.nextFloat() > 0.2f) {
-//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
-//                    } else {
-//                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Default);
-//                    }
-//                    blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
-//                }
-//            }
             for(int z = 0; z < CHUNK_SIZE; z++) {
                 if(PRINT_NOISE_VALUES) {
                     System.out.print(noise.getNoise(x, z) * 5 + "\t");
@@ -228,6 +241,11 @@ public class Chunk {
         rebuildMesh(startX, startY, startZ);
     }
     
+    /*
+    * method: createTexCube
+    * 
+    * purpose: This method create blocks with texture.
+    */
     public static float[] createTexCube(float x, float y, Block block) {
         float offset = (1024f/16)/1024f;
         
@@ -279,6 +297,11 @@ public class Chunk {
         throw new RuntimeException("No texture mapping for such block ID.");
     }
     
+    /*
+    * method: sameTextureAllSides
+    * 
+    * purpose: This method make blocks with same texture on all sides.
+    */
     private static float[] sameTextureAllSides(float x, float y, float offset, 
             float left, float top) {
         float right = left + 1;

@@ -19,10 +19,6 @@ import org.lwjgl.util.glu.GLU;
 import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 
-/**
- *
- * @author morri
- */
 public class Main {
     private FPCameraController fp;
     private DisplayMode displayMode;
@@ -34,10 +30,13 @@ public class Main {
         Main main = new Main();
         main.start();
     }
-
-    //public Main() {
-    //}
     
+    /*
+    * method: start
+    * 
+    * purpose: This method create the window and initialize GL and the
+    *          camera controller.
+    */
     public void start() {
         try {
             createWindow();
@@ -48,7 +47,12 @@ public class Main {
             e.printStackTrace();
         }
     }
-        
+    
+    /*
+    * method: createWindow
+    * 
+    * purpose: This method actually create the window.
+    */
     private void createWindow() throws Exception {
         Display.setFullscreen(false);
         DisplayMode d[] = Display.getAvailableDisplayModes();
@@ -64,6 +68,11 @@ public class Main {
         Display.create();
     }
     
+    /*
+    * method: initGL
+    * 
+    * purpose: This method initialize gl.
+    */
     private void initGL() {       
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glMatrixMode(GL_PROJECTION);
@@ -91,6 +100,11 @@ public class Main {
         glEnable(GL_LIGHT0);//enables light0
     }
     
+    /*
+    * method: initLightArrays
+    * 
+    * purpose: This method initialize the light arrays.
+    */
     private void initLightArrays() {
         lightPosition = BufferUtils.createFloatBuffer(4);
         lightPosition.put(0.0f).put(0.0f).put(0.0f).put(1.0f).flip();

@@ -11,10 +11,6 @@
 ****************************************************************/ 
 package minecraft;
 
-/**
- *
- * @author morri
- */
 public class Vector3Float {
     public float x, y, z;
     

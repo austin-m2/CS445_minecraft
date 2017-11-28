@@ -11,10 +11,6 @@
 ****************************************************************/ 
 package minecraft;
 
-/**
- *
- * @author Duy
- */
 public class Block {
     private boolean isActive;
     private BlockType type;
@@ -35,34 +31,69 @@ public class Block {
             BlockID = i;
         }
 
+        /*
+        * method: getID
+        * 
+        * purpose: This method get the block's ID.
+        */
         public int getID() {
             return BlockID;
         }
 
+        /*
+        * method: setID
+        * 
+        * purpose: This method set the block's ID.
+        */
         public void setID(int i) {
             BlockID = i;
         }
     }
     
+    /*
+    * method: Block
+    * 
+    * purpose: This constructor set the type of the block & active to true.
+    */
     public Block(BlockType type) {
         this.type = type;
         isActive = true;
     }
 
+    /*
+    * method: setCoords
+    * 
+    * purpose: This method set position of the block.
+    */
     public void setCoords(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /*
+    * method: isActive
+    * 
+    * purpose: This method return true for active block.
+    */
     public boolean isActive() {
         return isActive;
     }
 
+    /*
+    * method: setActive
+    * 
+    * purpose: This method set the isActive boolean for the block.
+    */
     public void setActive(boolean active) {
         isActive = active;
     }
 
+    /*
+    * method: getID
+    * 
+    * purpose: This method return the ID of the type.
+    */
     public int getID() {
         return type.getID();
     }
