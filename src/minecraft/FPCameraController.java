@@ -240,6 +240,30 @@ public class FPCameraController {
                 if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
                     camera.moveDown(movementSpeed);
                 }
+                
+                
+                //makes sure the user can't go past the edge of the universe
+                if (camera.position.x < -35) {
+                    camera.position.x = -35;
+                }
+                else if (camera.position.x > 55) {
+                    camera.position.x = 55;
+                }
+                
+                if (camera.position.y < -15) {
+                    camera.position.y = -15;
+                }
+                else if (camera.position.y > 65) {
+                    camera.position.y = 65;
+                }
+                
+                if (camera.position.z < -25) {
+                    camera.position.z = -25;
+                }
+                else if (camera.position.z > 70) {
+                    camera.position.z = 70;
+                }
+                
 
                 //set the modelview matrix back to the identity
                 glLoadIdentity();
