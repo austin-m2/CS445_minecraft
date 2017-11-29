@@ -1,10 +1,10 @@
 /***************************************************************
 * file: FPCameraController.java
-* author: Austin Morris, Duy Le, TszWai Yan
+* author: Austin Morris, Duy Le, TszWai Yan, Luis Lopez
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project
-* date last modified: 11/8/2017
+* date last modified: 11/28/2017
 *
 * purpose: create a first person camera object for user to control!
 * It also renders the world.

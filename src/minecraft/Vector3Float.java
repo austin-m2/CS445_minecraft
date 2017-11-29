@@ -1,6 +1,6 @@
 /***************************************************************
 * file: Main.java
-* author: Austin Morris
+* author: Austin Morris, Duy Le, TszWai Yan, Luis Lopez
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project

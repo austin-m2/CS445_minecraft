@@ -1,6 +1,6 @@
 /***************************************************************
 * file: Block.java
-* author: Duy Le
+* author: Austin Morris, Duy Le, TszWai Yan, Luis Lopez
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project

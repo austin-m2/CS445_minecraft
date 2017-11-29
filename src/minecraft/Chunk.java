@@ -1,6 +1,6 @@
 /***************************************************************
 * file: Chunk.java
-* author: Duy Le, TszWai Yan
+* author: Austin Morris, Duy Le, TszWai Yan, Luis Lopez
 * class: CS 445 – Computer Graphics
 *
 * assignment: final project
