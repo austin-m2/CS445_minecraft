@@ -74,7 +74,7 @@ public class Main {
     * purpose: This method initialize gl.
     */
     private void initGL() {       
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.53f, 0.81f, 0.98f, 0.0f);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         GLU.gluPerspective(100.0f, 
