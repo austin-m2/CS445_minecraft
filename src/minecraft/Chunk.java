@@ -183,7 +183,7 @@ public class Chunk {
         }
         
         r = new Random();
-        noise = new SimplexNoise(20, .25d, r.nextInt());
+        noise = new SimplexNoise(20, .40d, r.nextInt());
         
         blocks = new Block[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
         for (int x = 0; x < CHUNK_SIZE; x++) {
@@ -194,8 +194,19 @@ public class Chunk {
                 for(int y = 0; y < CHUNK_SIZE; y++) {
                     if(y == 0) {
                         blocks[x][y][z] = new Block(Block.BlockType.BlockType_Bedrock);
+                    } else if (y == 24) {
+                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+                    } else if (y == 23){
+                        double ranNum = r.nextDouble();
+                        if (ranNum > .8) {
+                            blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+                        } else if (ranNum > .4) {
+                            blocks[x][y][z] = new Block(Block.BlockType.BlockType_Stone);
+                        } else {
+                            blocks[x][y][z] = new Block(Block.BlockType.BlockType_Dirt);
+                        }
                     } else if (y >= 24 + noise.getNoise(x, z) * 5) {
-                        int ranNum = r.nextInt(3);
+                        int ranNum = r.nextInt(2);
                         switch (ranNum) {
                             case 0:
                                 blocks[x][y][z] = new Block(Block.BlockType.BlockType_Grass);
@@ -204,7 +215,7 @@ public class Chunk {
                                 blocks[x][y][z] = new Block(Block.BlockType.BlockType_Sand);
                                 break;
                             case 2:
-                                blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
+                                //blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
                                 break;
                             default:
                                 break;
@@ -225,6 +236,10 @@ public class Chunk {
                     
                     if(y >= 25 + noise.getNoise(x, z) * 5) {
                         blocks[x][y][z].setActive(false);
+                    }
+                    
+                    if (y == 24) {
+                        blocks[x][y][z] = new Block(Block.BlockType.BlockType_Water);
                     }
                 }
             }
